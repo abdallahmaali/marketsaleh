@@ -18,8 +18,8 @@ class PaymentGatewaySeeder extends Seeder
                 'title' => 'Stripe',
                 'name' => 'stripe',
                 'config' => json_encode([
-                    'secret_key' => 'sk_test_51LQPRBI8v6B8L0HsH8JBOEoUuzy0OMkhiOeqfiei1AHEkZBUnmcf7Cv5Go6fwhi3HYayZgjeLxjDsP0DYHcR0xJ1008GRte5Vf',
-                    'published_key' => 'pk_test_51LQPRBI8v6B8L0HsDPqZN4PY9gpuOvAktw3bqhvqWfo3zXs7Xe6S1hntVX7hZjVIVCDQ76nroy0nHUYGpRjt0lbT00aiqqq3M7',
+                    'secret_key' => 'xxxx',
+                    'published_key' => 'xxxxx',
                 ]),
                 'mode' => 'test',
                 'alias' => 'Stripe',
