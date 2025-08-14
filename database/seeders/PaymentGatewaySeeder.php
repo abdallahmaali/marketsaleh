@@ -29,8 +29,8 @@ class PaymentGatewaySeeder extends Seeder
                 'title' => 'PayPal',
                 'name' => 'paypal',
                 'config' => json_encode([
-                    'client_id' => 'ASw2Ol4zJrd7UOYWz7Vjwv2ZBEZ9AXuF4aCbSXLXImOp8HaCFwGHCggJ1QBuzSoouGJ6vMncd9pMAtV9',
-                    'client_secret' => 'EA3d_eVh67xx4_vk1FYAsV75faeFvLVf1B6d2Rg9E4BfjXetw63k883MtSoVLi2v8P3bbW3tOJVFEKdt',
+                    'client_id' => 'xxxxxx',
+                    'client_secret' => 'xxx',
                 ]),
                 'mode' => 'test',
                 'alias' => 'PayPal',
