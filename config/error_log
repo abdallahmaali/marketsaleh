@@ -1,0 +1,8 @@
+[03-Aug-2025 05:52:03 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home4/ggxybsmy/public_html/config/database.php:18
+Stack trace:
+#0 {main}
+  thrown in /home4/ggxybsmy/public_html/config/database.php on line 18
+[03-Aug-2025 05:52:03 America/Boise] PHP Fatal error:  Uncaught Error: Call to undefined function env() in /home4/ggxybsmy/public_html/config/app.php:19
+Stack trace:
+#0 {main}
+  thrown in /home4/ggxybsmy/public_html/config/app.php on line 19
