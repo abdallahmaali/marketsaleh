@@ -1,3 +1,9 @@
 .env
 .env.local
 node_modules/
+
+# Server configuration files
+.htaccess
+.htaccess.phpupgrader.*
+.user.ini
+public/.htaccess
