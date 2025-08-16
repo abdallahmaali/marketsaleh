@@ -16,10 +16,97 @@
     --primary-800: #ffffff;
     --primary-900: #ffffff;
     --primary-950: #ffffff;
+    
+    /* Font variables */
+    --font-family-primary: "Roboto", sans-serif;
+    --font-family-arabic: "Tajawal", "Noto Kufi Arabic", sans-serif;
 }
 
+/* Default font (English/LTR) */
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: var(--font-family-primary);
+    transition: font-family 0.3s ease;
+}
+
+/* Arabic font when body has lang-ar class */
+body.lang-ar {
+    font-family: var(--font-family-arabic);
+}
+
+/* English font when body has lang-en class */
+body.lang-en {
+    font-family: var(--font-family-primary);
+}
+
+/* Utility classes for manual font control */
+.font-arabic {
+    font-family: var(--font-family-arabic) !important;
+}
+
+.font-english {
+    font-family: var(--font-family-primary) !important;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+    text-align: right;
+}
+
+[dir="ltr"] {
+    text-align: left;
+}
+
+/* RTL-specific text alignment utilities */
+.text-start {
+    text-align: start;
+}
+
+.text-end {
+    text-align: end;
+}
+
+/* Input fields in RTL */
+[dir="rtl"] input,
+[dir="rtl"] textarea,
+[dir="rtl"] select {
+    text-align: right;
+}
+
+[dir="ltr"] input,
+[dir="ltr"] textarea,
+[dir="ltr"] select {
+    text-align: left;
+}
+
+/* Flex direction for RTL */
+[dir="rtl"] .flex-row-reverse-rtl {
+    flex-direction: row-reverse;
+}
+
+/* Margin and padding utilities for RTL */
+[dir="rtl"] .ml-auto {
+    margin-left: unset;
+    margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+    margin-right: unset;
+    margin-left: auto;
+}
+
+/* Border radius for RTL */
+[dir="rtl"] .rounded-l-lg {
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+[dir="rtl"] .rounded-r-lg {
+    border-top-right-radius: unset;
+    border-bottom-right-radius: unset;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
 }
 
 .main-container {

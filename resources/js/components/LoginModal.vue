@@ -2,7 +2,7 @@
     <div>
         <!-- login modal-->
         <TransitionRoot as="template" :show="AuthStore.loginModal">
-            <Dialog as="div" class="relative z-10" @close="AuthStore.hideLoginModal()">
+            <Dialog as="div" class="relative z-10" @close="handleModalClose">
                 <TransitionChild as="template" enter="ease-out duration-300" enter-from="opacity-0"
                     enter-to="opacity-100" leave="ease-in duration-200" leave-from="opacity-100" leave-to="opacity-0">
                     <div class="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity" />
@@ -67,7 +67,7 @@
                                         </div>
                                     </div>
 
-                                    <form @submit.prevent="loginFormSubmit()">
+                                    <form @submit.prevent="loginFormSubmit()" @click.stop>
                                         <!-- Phone Number -->
                                         <div class="mt-8">
                                             <label
@@ -78,7 +78,11 @@
                                             <input type="text" v-model="loginFormData.phone"
                                                 :placeholder="$t('Enter email or phone number')"
                                                 class="text-base font-normal w-full p-3 placeholder:text-slate-400 rounded-lg border  focus:border-primary outline-none"
-                                                :class="errors && errors?.phone ? 'border-red-500' : 'border-slate-200'">
+                                                :class="[
+                                                    errors && errors?.phone ? 'border-red-500' : 'border-slate-200',
+                                                    master.langDirection === 'rtl' ? 'text-right' : 'text-left'
+                                                ]"
+                                                @click.stop>
                                             <span v-if="errors && errors?.phone" class="text-red-500 text-sm">
                                                 {{ errors?.phone[0] }}
                                             </span>
@@ -95,8 +99,12 @@
                                                 <input :type="showLoginPassword ? 'text' : 'password'"
                                                     v-model="loginFormData.password" :placeholder="$t('Enter Password')"
                                                     class="text-base font-normal w-full p-3 placeholder:text-slate-400 rounded-lg border focus:border-primary outline-none"
-                                                    :class="errors && errors?.password ? 'border-red-500' : 'border-slate-200'">
-                                                <button @click="showLoginPassword = !showLoginPassword" type="button">
+                                                    :class="[
+                                                        errors && errors?.password ? 'border-red-500' : 'border-slate-200',
+                                                        master.langDirection === 'rtl' ? 'text-right' : 'text-left'
+                                                    ]"
+                                                    @click.stop>
+                                                <button @click.stop="showLoginPassword = !showLoginPassword" type="button">
                                                     <EyeIcon v-if="showLoginPassword"
                                                         class="w-6 h-6 text-slate-700 absolute top-1/2 -translate-y-1/2" :class="master.langDirection==='rtl' ? 'left-4' : 'right-4'" />
                                                     <EyeSlashIcon v-else
@@ -109,8 +117,9 @@
                                         </div>
 
                                         <!-- Forgot Password -->
-                                        <div class="mt-2 text-right">
-                                            <button type="button" class="text-right text-slate-700 text-base font-normal leading-normal hover:text-primary transition-all duration-300"
+                                        <div class="mt-2" :class="master.langDirection === 'rtl' ? 'text-left' : 'text-right'">
+                                            <button type="button" class="text-slate-700 text-base font-normal leading-normal hover:text-primary transition-all duration-300"
+                                                :class="master.langDirection === 'rtl' ? 'text-left' : 'text-right'"
                                                 @click="showForgetPasswordDialog()">
                                                 {{ $t('Forgot Password') }}?
                                             </button>
@@ -262,6 +271,12 @@ const showRegisterDialog = () => {
 const showLoginDialog = () => {
     registerDialog.value = false
     AuthStore.showLoginModal();
+}
+
+// Handle modal close - only close on explicit background click, not on input interactions
+const handleModalClose = (event) => {
+    // Only close if it's not from form interactions
+    AuthStore.hideLoginModal();
 }
 
 /**

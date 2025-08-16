@@ -58,6 +58,7 @@ class ShopCreateRequest extends FormRequest
             'shop_logo' => [$required, 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             'shop_banner' => [$required, 'image', 'mimes:jpg,png,jpeg,gif', 'max:2048'],
             'description' => ['nullable', 'string', 'max:200'],
+            'country_id' => [$this->routeIs('admin.shop.update') ? 'nullable' : 'required', 'exists:countries,id'],
         ];
     }
 

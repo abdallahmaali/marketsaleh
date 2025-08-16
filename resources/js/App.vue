@@ -25,7 +25,33 @@ onMounted(() => {
     startLastSeenUpdater(); // Start interval
     callLastSeenUpdater();  // Immediate call on mount
     handlePusherChanel();
+    initializeDirection(); // Set initial direction based on stored locale
 });
+
+// Initialize direction based on stored locale
+const initializeDirection = () => {
+    const currentLocale = localStorage.getItem('locale') || 'en';
+    const direction = currentLocale === 'ar' ? 'rtl' : 'ltr';
+    
+    // Force direction change on HTML element
+    const htmlElement = document.documentElement;
+    htmlElement.setAttribute('dir', direction);
+    htmlElement.setAttribute('lang', currentLocale);
+    htmlElement.style.direction = direction;
+    
+    // Update body classes
+    document.body.classList.remove('lang-ar', 'lang-en');
+    document.body.classList.add('lang-' + currentLocale);
+    
+    // Force update masterStore direction (override persisted incorrect value)
+    masterStore.langDirection = direction;
+    
+    // Also update localStorage to ensure consistency
+    localStorage.setItem('langDirection', direction);
+    
+    // Debug log
+    console.log(`App initialized with locale: ${currentLocale}, direction: ${direction}`, 'HTML dir attr:', htmlElement.getAttribute('dir'));
+};
 
 onBeforeUnmount(() => clearInterval(startLastSeenUpdater.intervalId));
 

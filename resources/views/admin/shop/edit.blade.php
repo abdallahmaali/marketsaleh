@@ -94,6 +94,15 @@
                             :value="$shop->address" />
                     </div>
 
+                    <div class="col-md-4 mt-3 mt-md-0">
+                        <x-select label="Country" name="country_id" required="true">
+                            <option value="">{{ __('Select Country') }}</option>
+                            @foreach ($countries as $country)
+                                <option value="{{ $country->id }}" {{ $shop->country_id == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
+                            @endforeach
+                        </x-select>
+                    </div>
+
                     <div class="col-md-6 mt-4">
                         <div class="d-flex align-items-center justify-content-center mb-2">
                             <div class="ratio1x1">

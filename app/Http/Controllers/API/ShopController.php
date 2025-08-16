@@ -31,6 +31,16 @@ class ShopController extends Controller
             return $query->isActive();
         });
 
+        // Filter by country if provided
+        if ($request->has('country_id') && $request->country_id) {
+            $shops = $shops->where('country_id', $request->country_id);
+        }
+
+        // Filter by shop name if provided
+        if ($request->has('search') && $request->search) {
+            $shops = $shops->where('name', 'LIKE', '%' . $request->search . '%');
+        }
+
         $total = $shops->count();
 
         $shops = $shops->when($perPage && $page, function ($query) use ($perPage, $skip) {

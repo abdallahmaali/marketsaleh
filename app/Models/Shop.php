@@ -26,6 +26,14 @@ class Shop extends Model
         return $this->belongsTo(User::class);
     }
 
+    /**
+     * Get the country for the Shop.
+     */
+    public function country(): BelongsTo
+    {
+        return $this->belongsTo(Country::class);
+    }
+
     public function subscriptions(): HasMany
     {
         return $this->hasMany(ShopSubscription::class);

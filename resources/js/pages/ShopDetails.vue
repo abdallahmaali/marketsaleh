@@ -64,10 +64,17 @@
                                         :class="i <= shop?.rating ? 'text-amber-500' : 'text-gray-300'" />
                                 </div>
                             </div>
-                            <div @click.stop="openChat(shop)"
-                                class="w-12 h-12 flex justify-center items-center bg-red-50 rounded-lg cursor-pointer">
-                                <img src="/public/assets/icons/shop-chat/chat.svg" alt="chat" class="w-8 h-8">
-                            </div>
+                            <button @click.stop="openChat(shop)"
+                                class="flex items-center gap-2 px-4 py-3 bg-red-50 hover:bg-red-100 rounded-lg cursor-pointer transition-colors duration-200 relative group"
+                                :title="authStore.token ? $t('Contact Seller') : $t('Please login to contact the seller')">
+                                <img src="/public/assets/icons/shop-chat/chat.svg" alt="chat" class="w-5 h-5">
+                                <span class="text-sm font-medium text-gray-700">{{ $t('Contact Seller') }}</span>
+                                <!-- Tooltip for unauthenticated users -->
+                                <div v-if="!authStore.token" 
+                                    class="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap z-10">
+                                    {{ $t('Please login to contact the seller') }}
+                                </div>
+                            </button>
                         </div>
                     </div>
 
@@ -75,6 +82,10 @@
                     <RightChatSidebar v-if="activeChatShop" :show="showSidebar" @close="showSidebar = false"
                         :shop="activeChatShop" />
                     <!-- chat sidebar end -->
+
+                    <!-- login modal -->
+                    <LoginModal />
+                    <!-- login modal end -->
 
                     <!-- Buttons and search -->
                     <div class="flex justify-between items-center w-full">
@@ -240,6 +251,7 @@ import ReviewRatings from '../components/ReviewRatings.vue';
 import Review from '../components/Review.vue';
 import SkeletonLoader from '../components/SkeletonLoader.vue';
 import RightChatSidebar from '../components/RightChatSidebar.vue';
+import LoginModal from '../components/LoginModal.vue';
 
 import { useMaster } from '../stores/MasterStore';
 import { useAuth } from '../stores/AuthStore';
@@ -392,6 +404,9 @@ const breakpoints = {
 
 
 const openChat = (shop) => {
+    if (authStore.token === null) {
+        return authStore.loginModal = true;
+    }
     activeChatShop.value = shop;
     showChat();
 };

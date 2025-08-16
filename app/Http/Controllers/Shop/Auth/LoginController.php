@@ -104,7 +104,8 @@ class LoginController extends Controller
 
     public function create()
     {
-        return view('shop.auth.create');
+        $countries = \App\Models\Country::orderBy('name')->get();
+        return view('shop.auth.create', compact('countries'));
     }
 
     public function store(ShopCreateRequest $request)

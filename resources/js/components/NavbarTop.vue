@@ -87,27 +87,86 @@ const master = useMaster();
 
 const currentLanguage = ref('English');
 
+const setCurrentLanguage = (lang) => {
+    master.locale = lang;
+    localStorage.setItem('locale', lang);
+
+    // Try to find language by name or title
+    const language = master.languages.find(item => 
+        item.name === master.locale || 
+        item.title === master.locale ||
+        (master.locale === 'ar' && (item.name === 'Arabic' || item.title === 'Arabic' || item.title === 'العربية'))
+    );
+    
+    // Determine direction - prioritize Arabic override since server data might be wrong
+    let direction = 'ltr';
+    if (lang === 'ar') {
+        direction = 'rtl'; // Force RTL for Arabic regardless of server data
+    } else if (language && language.direction) {
+        direction = language.direction;
+    }
+    
+    // Debug: Check what language was found and direction logic
+    console.log('setCurrentLanguage called with:', lang);
+    console.log('master.locale set to:', master.locale);
+    console.log('localStorage locale:', localStorage.getItem('locale'));
+    console.log('Found language:', language);
+    console.log('Calculated direction:', direction);
+    console.log('All available languages:', master.languages);
+    
+    // Set language title and direction
+    if (language) {
+        currentLanguage.value = language.title;
+    } else {
+        // Fallback titles if language data not loaded yet
+        currentLanguage.value = lang === 'ar' ? 'العربية' : 'English';
+    }
+    
+    // Force update direction (override any persisted incorrect value)
+    master.langDirection = direction;
+    localStorage.setItem('langDirection', direction);
+    
+    // Update body class and direction for immediate font switching
+    document.body.classList.remove('lang-ar', 'lang-en');
+    document.body.classList.add('lang-' + lang);
+    
+    // Force direction change on HTML element
+    const htmlElement = document.documentElement;
+    htmlElement.setAttribute('dir', direction);
+    htmlElement.setAttribute('lang', lang);
+    
+    // Also set it via style as a fallback
+    htmlElement.style.direction = direction;
+    
+    // Debug log
+    console.log(`=== DIRECTION UPDATE ===`);
+    console.log(`Language changed to: ${lang}, Direction: ${direction}`);
+    console.log('HTML dir attr after setting:', htmlElement.getAttribute('dir'));
+    console.log('HTML style.direction:', htmlElement.style.direction);
+    console.log('Master langDirection:', master.langDirection);
+    
+    // Send locale to server for future requests
+    document.cookie = `locale=${lang}; path=/; max-age=31536000; SameSite=Lax`; // 1 year
+    
+    localization.fetchLocalizationData();
+};
+
 onMounted(() => {
     setCurrentLanguage(master.locale);
 });
+
+// Watch for when languages are loaded and update direction
+watch(() => master.languages, (newLanguages) => {
+    if (newLanguages && newLanguages.length > 0) {
+        setCurrentLanguage(master.locale);
+    }
+}, { immediate: true });
 
 watch(() => master.locale, (oldValue, newValue) => {
     if (oldValue !== newValue) {
         setCurrentLanguage(master.locale);
     }
 });
-
-const setCurrentLanguage = (lang) => {
-    master.locale = lang;
-    localStorage.setItem('locale', lang);
-
-    const language = master.languages.find(lang => lang.name === master.locale);
-    if (language) {
-        currentLanguage.value = language.title;
-        master.langDirection = language.direction || 'ltr';
-    }
-    localization.fetchLocalizationData();
-};
 
 const setCurrentCurrency = (currency) => {
     master.selectedCurrency = currency;

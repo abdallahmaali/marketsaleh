@@ -7,6 +7,19 @@
         <!-- loading -->
          <SkeletonLoader v-else class="w-48 sm:w-60 md:w-72 lg:w-96 h-12 rounded-lg" />
 
+        <!-- Shop Search Component -->
+        <div class="mt-8">
+            <ShopSearchByCountry 
+                :showTitle="false"
+                :showResultsCount="true"
+                :resultsCount="totalShops"
+                :autoSearch="true"
+                :debounceDelay="300"
+                @search="handleSearch"
+                @clear="clearSearch"
+                ref="searchComponent" />
+        </div>
+
         <!-- Shops -->
         <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-start">
 
@@ -41,12 +54,14 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import ShopCard from '../components/ShopCard.vue';
+import ShopSearchByCountry from '../components/ShopSearchByCountry.vue';
 import { useMaster } from '../stores/MasterStore';
 import SkeletonLoader from '../components/SkeletonLoader.vue';
 const masterStore = useMaster();
 
 import { useRouter } from 'vue-router';
-const router = new useRouter();
+import axios from 'axios';
+const router = useRouter();
 
 const isLoading = ref(true);
 const currentPage = ref(1);
@@ -55,11 +70,30 @@ const totalShops = ref(0);
 
 const shops = ref([]);
 
+// Search filters
+const searchComponent = ref(null);
+const searchFilters = ref({
+    country_id: null,
+    country_name: null,
+    search: ''
+});
+
 onMounted(() => {
     if (!masterStore.multiVendor) {
         router.push('/');
         return;
     }
+    
+    // Check for URL query parameters
+    const query = router.currentRoute.value.query;
+    if (query.country_id || query.search) {
+        searchFilters.value = {
+            country_id: query.country_id || null,
+            country_name: null,
+            search: query.search || ''
+        };
+    }
+    
     fetchShops();
     window.scrollTo(0, 0);
 });
@@ -69,14 +103,48 @@ const onClickHandler = async (page) => {
     fetchShops();
 };
 
+const handleSearch = (searchParams) => {
+    // Update search filters
+    searchFilters.value = {
+        country_id: searchParams.country?.id || null,
+        country_name: searchParams.country?.name || null,
+        search: searchParams.search || ''
+    };
+    
+    // Reset to first page when searching
+    currentPage.value = 1;
+    fetchShops();
+};
+
+const clearSearch = () => {
+    searchFilters.value = {
+        country_id: null,
+        country_name: null,
+        search: ''
+    };
+    currentPage.value = 1;
+    fetchShops();
+};
+
 const fetchShops = async () => {
     window.scrollTo(0, 0)
     isLoading.value = true;
+    
+    const params = {
+        page: currentPage.value,
+        per_page: perPage.value
+    };
+    
+    // Add search filters if they exist
+    if (searchFilters.value.country_id) {
+        params.country_id = searchFilters.value.country_id;
+    }
+    if (searchFilters.value.search) {
+        params.search = searchFilters.value.search;
+    }
+    
     axios.get('/shops', {
-        params: {
-            page: currentPage.value,
-            per_page: perPage.value
-        },
+        params: params,
         headers: {
             'Accept-Language': masterStore.locale || 'en',
         }
@@ -86,7 +154,10 @@ const fetchShops = async () => {
         setTimeout(() => {
             isLoading.value = false;
         }, 300);
-    })
+    }).catch((error) => {
+        console.error('Error fetching shops:', error);
+        isLoading.value = false;
+    });
 };
 
 </script>

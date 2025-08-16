@@ -1449,5 +1449,18 @@
     "All Brand": "",
     "All Color": "",
     "Apply Filters": "",
-    " No Action": ""
+    " No Action": "",
+    "Contact Seller": "تواصل مع البائع",
+    "Please login to contact the seller": "يرجى تسجيل الدخول للتواصل مع البائع",
+    "Search Shops by Country": "البحث عن المتاجر حسب البلد",
+    "Find shops in your preferred location": "اعثر على المتاجر في موقعك المفضل",
+    "Shop Name": "اسم المتجر",
+    "Search shop by name": "البحث عن متجر بالاسم",
+    "Search Shops": "البحث عن المتاجر",
+    "Active filters": "المرشحات النشطة",
+    "Clear all": "مسح الكل",
+    "Found": "تم العثور على",
+    "shops": "متاجر",
+    "in": "في",
+    "matching": "تطابق"
 }

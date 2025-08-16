@@ -7,10 +7,11 @@
             </router-link>
             <div class="relative overflow-hidden grow max-w-[800px] hidden md:block">
                 <input type="text" v-model="search" :placeholder="$t('Search product')"
-                    class="px-2.5 py-2.5 block rounded-lg border border-slate-200 focus:border-primary w-full placeholder:text-gray-400 outline-none text-base font-normal leading-normal"
+                    class="px-2.5 py-2.5 block border border-slate-200 focus:border-primary w-full placeholder:text-gray-400 outline-none text-base font-normal leading-normal"
+                    :class="master.langDirection === 'rtl' ? 'rounded-r-lg pl-16 pr-2.5' : 'rounded-l-lg pr-16 pl-2.5'"
                     @keyup.enter="searchProducts()">
                 <button class="bg-primary-600 h-full w-14 border-none absolute top-0 flex items-center justify-center"
-                    :class="master.langDirection == 'rtl' ? 'left-0 rounded-l-lg' : ' right-0 rounded-r-lg'"
+                    :class="master.langDirection === 'rtl' ? 'left-0 rounded-l-lg' : 'right-0 rounded-r-lg'"
                     @click="searchProducts()">
                     <MagnifyingGlassIcon class="w-6 h-6 text-white" />
                 </button>

@@ -1,10 +1,12 @@
 import { defineStore } from "pinia";
 
 export const useMaster = defineStore("masterStore", {
-    state: () => ({
-        locale: "en",
-        langDirection: "ltr",
-        defaultLocale: "en",
+    state: () => {
+        const storedLocale = localStorage.getItem('locale') || "en";
+        return {
+            locale: storedLocale,
+            langDirection: storedLocale === 'ar' ? "rtl" : "ltr",
+            defaultLocale: "en",
         logo: null,
         currency: {
             symbol: "$",
@@ -61,7 +63,8 @@ export const useMaster = defineStore("masterStore", {
         orderPlaceAccountVerify: false,
         menus: [],
         footers: [],
-    }),
+        };
+    },
 
     getters: {
         getPosition: (state) => {

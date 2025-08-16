@@ -21,6 +21,11 @@ export default {
                 "primary-900": "var(--primary-900)",
                 "primary-950": "var(--primary-950)",
             },
+            fontFamily: {
+                'arabic': ['Tajawal', 'Noto Kufi Arabic', 'sans-serif'],
+                'english': ['Roboto', 'sans-serif'],
+                'sans': ['var(--font-family-primary)', 'sans-serif'],
+            },
             screens: {
                 xs: "375px",
             },

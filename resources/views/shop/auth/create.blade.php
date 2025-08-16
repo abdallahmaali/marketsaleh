@@ -250,6 +250,15 @@
                                             placeholder="Enter Address" />
                                     </div>
 
+                                    <div class="col-md-12 mt-4">
+                                        <x-select label="Country" name="country_id" required="true">
+                                            <option value="">{{ __('Select Country') }}</option>
+                                            @foreach ($countries as $country)
+                                                <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                            @endforeach
+                                        </x-select>
+                                    </div>
+
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div class="col-md-7 mt-4">

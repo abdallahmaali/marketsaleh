@@ -1,6 +1,18 @@
 <template>
     <div>
         <HeroBanner :banners="banner" :ads="ads" :isLoading="isLoading" />
+        <div v-if="master.getMultiVendor">
+            <div class="main-container mt-16 mb-8">
+                <div class="border border-gray-200 rounded-lg p-6">
+                    <ShopSearchByCountry
+                        :showTitle="true"
+                        :showResultsCount="false"
+                        :autoSearch="false"
+                        @search="navigateToShopsWithFilter" />
+                </div>
+            </div>
+            <TopRatedShops :shops="topRatedShops" :isLoading="isLoading" />
+        </div>
         <AboutSupport :isLoading="isLoading" />
         <Categories :categories="categories" :isLoading="isLoginCategory" />
         <div v-if="incomingFlashSale">
@@ -10,9 +22,7 @@
             <FlashSaleRunning :flashSale="runningFlashSale" />
         </div>
         <PopularProducts :products="popularProducts" :isLoading="isLoading" />
-        <div v-if="master.getMultiVendor">
-            <TopRatedShops :shops="topRatedShops" :isLoading="isLoading" />
-        </div>
+
         <JustForYou :justForYou="justForYou" :isLoading="isLoading" />
         <RecentlyViews :products="recentlyViewProducts" :isLoading="isLoginRecentlyView" />
     </div>
@@ -29,15 +39,17 @@ import JustForYou from "../components/JustForYou.vue";
 import PopularProducts from "../components/PopularProducts.vue";
 import RecentlyViews from "../components/RecentlyViews.vue";
 import TopRatedShops from "../components/TopRatedShops.vue";
+import ShopSearchByCountry from "../components/ShopSearchByCountry.vue";
 import { useBasketStore } from "../stores/BasketStore";
 import { useMaster } from "../stores/MasterStore";
 
 import axios from "axios";
 import { useAuth } from "../stores/AuthStore";
+import { useRouter } from "vue-router";
 
 const master = useMaster();
 const basketStore = useBasketStore();
-
+const router = useRouter();
 const authStore = useAuth();
 const isLoading = ref(true);
 const isLoginCategory = ref(true);
@@ -116,6 +128,25 @@ const fetchViewProducts = () => {
             }
         });
     }
+};
+
+const navigateToShopsWithFilter = (searchParams) => {
+    // Build query parameters for the shops page
+    const query = {};
+
+    if (searchParams.country?.id) {
+        query.country_id = searchParams.country.id;
+    }
+
+    if (searchParams.search) {
+        query.search = searchParams.search;
+    }
+
+    // Navigate to shops page with filters
+    router.push({
+        name: 'shop',
+        query: query
+    });
 };
 </script>
 

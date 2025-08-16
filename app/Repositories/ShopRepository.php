@@ -51,6 +51,7 @@ class ShopRepository extends Repository
             'delivery_charge' => $request->delivery_charge ?? 0,
             'address' => $request->address,
             'description' => $request->description,
+            'country_id' => $request->country_id,
             'status' => true,
         ]);
     }
@@ -77,6 +78,7 @@ class ShopRepository extends Repository
             'delivery_charge' => $request->delivery_charge ?? 0,
             'address' => $request->address,
             'description' => $request->description,
+            'country_id' => $request->country_id,
             'min_order_amount' => $request->min_order_amount ?? $shop->min_order_amount,
             'prefix' => $request->prefix ?? $shop->prefix,
             'opening_time' => $request->opening_time ?? $shop->opening_time,
